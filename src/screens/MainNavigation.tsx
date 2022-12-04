@@ -19,8 +19,17 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { VideoStream } from "./VideoStream";
+import SettingsIcon from "@mui/icons-material/Settings";
+import UploadIcon from "@mui/icons-material/Upload";
+import ListSubheader from "@mui/material/ListSubheader";
+import Collapse from "@mui/material/Collapse";
+import DraftsIcon from "@mui/icons-material/Drafts";
+import SendIcon from "@mui/icons-material/Send";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import StarBorder from "@mui/icons-material/StarBorder";
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
@@ -81,6 +90,12 @@ export const MainNavigation: FunctionComponent<NavProps> = ({
 }) => {
   const theme = useTheme();
 
+  const iconArr = [<UploadIcon />, <SettingsIcon />];
+  const [listOpen, setListOpen] = React.useState(true);
+  const handleClick = () => {
+    setListOpen(!listOpen);
+  };
+
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -103,9 +118,7 @@ export const MainNavigation: FunctionComponent<NavProps> = ({
             {["Upload", "Settings"].map((text, index) => (
               <ListItem key={text} disablePadding>
                 <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
+                  <ListItemIcon>{iconArr[index]}</ListItemIcon>
                   <ListItemText primary={text} />
                 </ListItemButton>
               </ListItem>
@@ -121,12 +134,43 @@ export const MainNavigation: FunctionComponent<NavProps> = ({
               <ListItem key={text} disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    <InboxIcon />
                   </ListItemIcon>
                   <ListItemText primary={text} />
                 </ListItemButton>
               </ListItem>
             ))}
+            <Divider style={{ backgroundColor: theme.palette.grey[800] }} />
+
+            <ListItemButton>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Sent mail" />
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                <DraftsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Drafts" />
+            </ListItemButton>
+            <ListItemButton onClick={handleClick}>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Inbox" />
+              {listOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={listOpen} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                    <StarBorder />
+                  </ListItemIcon>
+                  <ListItemText primary="Starred" />
+                </ListItemButton>
+              </List>
+            </Collapse>
           </List>
           <div
             style={{ height: "100%", backgroundColor: theme.palette.grey[900] }}

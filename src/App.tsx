@@ -33,7 +33,6 @@ export default function App() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               BJJFANATICS
             </Typography>
-            <Button color="inherit">Login</Button>
           </Toolbar>
         </AppBar>
       </Box>
@@ -47,13 +46,5 @@ export default function App() {
         </Routes>
       </Router>
     </div>
-    // <>
-    //   <ButtonAppBar />
-    //   <Container>
-    //     <Typography variant="h4" component="h1" gutterBottom>
-    //       Create React App example with TypeScript
-    //     </Typography>
-    //   </Container>
-    // </>
   );
 }
