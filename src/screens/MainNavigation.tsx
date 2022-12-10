@@ -28,6 +28,9 @@ import SendIcon from "@mui/icons-material/Send";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import StarBorder from "@mui/icons-material/StarBorder";
+import { UploadModal } from "../components/UploadModal";
+import Button from "@mui/material/Button";
+import Editor from "../components/Editor";
 
 const drawerWidth = 250;
 
@@ -84,14 +87,14 @@ type NavProps = {
   open: boolean;
   handleDrawer: () => void;
 };
-export const MainNavigation: FunctionComponent<NavProps> = ({
-  handleDrawer,
-  open,
-}) => {
+export const MainNavigation: FunctionComponent<NavProps> = ({ open }) => {
   const theme = useTheme();
 
-  const iconArr = [<UploadIcon />, <SettingsIcon />];
   const [listOpen, setListOpen] = React.useState(true);
+  const [openModal, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const handleClick = () => {
     setListOpen(!listOpen);
   };
@@ -115,15 +118,16 @@ export const MainNavigation: FunctionComponent<NavProps> = ({
         >
           <DrawerHeader />
           <List style={{ backgroundColor: theme.palette.grey[900] }}>
-            {["Upload", "Settings"].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>{iconArr[index]}</ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
+            <ListItem disablePadding>
+              <ListItemButton onClick={handleOpen}>
+                <ListItemIcon>{<UploadIcon />}</ListItemIcon>
+                <ListItemText primary={"Upload"} />
+              </ListItemButton>
+            </ListItem>
           </List>
+          {openModal && (
+            <UploadModal openModal={openModal} handleClose={handleClose} />
+          )}
           <Divider style={{ backgroundColor: theme.palette.grey[800] }} />
           <List style={{ backgroundColor: theme.palette.grey[900] }}>
             {[
@@ -178,6 +182,7 @@ export const MainNavigation: FunctionComponent<NavProps> = ({
         </Drawer>
         <Main open={open}>
           <VideoStream />
+          <Editor />
         </Main>
       </Box>
     </>
