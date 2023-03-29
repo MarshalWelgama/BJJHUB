@@ -12,7 +12,7 @@ import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Button } from "@mui/material";
 
-export default () => {
+export const Editor = ({ plyrRef }: { plyrRef: Plyr }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -28,7 +28,7 @@ export default () => {
     const url = window.prompt("URL");
 
     if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
+      editor?.chain().focus().setImage({ src: url }).run();
     }
   };
 
@@ -71,7 +71,7 @@ export default () => {
                 : "grey",
               borderColor: editor.isActive("heading", { level: 1 })
                 ? "white"
-                : "grey",
+                : "#5e80df;",
             }}
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 1 }).run()
@@ -81,16 +81,17 @@ export default () => {
           </Button>
           <Button
             variant="outlined"
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 2 }).run()
-            }
+            onClick={() => {
+              editor.chain().focus().toggleHeading({ level: 2 }).run();
+              console.log(plyrRef.currentTime);
+            }}
             sx={{
               color: editor.isActive("heading", { level: 2 })
                 ? "white"
                 : "grey",
               borderColor: editor.isActive("heading", { level: 2 })
                 ? "white"
-                : "grey",
+                : "#5e80df",
             }}
           >
             H2
@@ -100,7 +101,7 @@ export default () => {
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             sx={{
               color: editor.isActive("bulletList") ? "white" : "grey",
-              borderColor: editor.isActive("bulletList") ? "white" : "grey",
+              borderColor: editor.isActive("bulletList") ? "white" : "#5e80df",
             }}
           >
             Bullet List
@@ -110,10 +111,22 @@ export default () => {
             onClick={addImage}
             sx={{
               color: editor.isActive("image") ? "white" : "grey",
-              borderColor: editor.isActive("image") ? "white" : "grey",
+              borderColor: editor.isActive("image") ? "white" : "#5e80df",
             }}
           >
             Image
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              console.log(plyrRef.currentTime);
+            }}
+            sx={{
+              color: "grey",
+              borderColor: "#5e80df",
+            }}
+          >
+            Current Time
           </Button>
         </div>
       )}

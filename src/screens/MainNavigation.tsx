@@ -1,36 +1,19 @@
 import * as React from "react";
-import { FunctionComponent } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { VideoStream } from "./VideoStream";
-import SettingsIcon from "@mui/icons-material/Settings";
 import UploadIcon from "@mui/icons-material/Upload";
-import ListSubheader from "@mui/material/ListSubheader";
-import Collapse from "@mui/material/Collapse";
-import DraftsIcon from "@mui/icons-material/Drafts";
-import SendIcon from "@mui/icons-material/Send";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import StarBorder from "@mui/icons-material/StarBorder";
-import { UploadModal } from "../components/UploadModal";
-import Button from "@mui/material/Button";
-import Editor from "../components/Editor";
 import { Instructional } from "../components/Instructional";
 import AppBar from "@mui/material/AppBar";
 import "./VideoStream.css";
@@ -43,8 +26,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 }>(({ theme, open, navbarActive }) => ({
   flexGrow: 1,
   opacity: navbarActive ? 0.1 : "",
-  filter: navbarActive ? "brightness(0.6) blur(2px)" : "",
-  // padding: theme.spacing(3),
+  pointerEvents: navbarActive ? "none" : "all",
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,

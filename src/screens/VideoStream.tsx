@@ -1,10 +1,8 @@
-import { Box } from "@mui/material";
-import { Container } from "@mui/system";
-import Plyr from "plyr-react";
-import React, { FunctionComponent } from "react"; // importing FunctionComponent
+import Plyr, { APITypes } from "plyr-react";
+import React, { FunctionComponent, useRef } from "react"; // importing FunctionComponent
 import "plyr-react/plyr.css";
 import "./VideoStream.css";
-import Editor from "../components/Editor";
+import { Editor } from "../components/Editor";
 
 const plyrProps: any = {
   source: {
@@ -18,21 +16,29 @@ const plyrProps: any = {
     ],
   }, // https://github.com/sampotts/plyr#the-source-setter
   options: {
-    ratio: "16:9",
+    ratio: "21:9",
     fullscreen: { enabled: true, fallback: true, iosNative: true },
     quality: {
       default: 576,
       options: [4320, 2880, 2160, 1440, 1080, 720, 576, 480, 360, 240],
     },
+    disableContextMenu: true,
+    markers: { enabled: true, points: [{ time: 30, label: "test" }] },
+    tooltips: { controls: false, seek: true },
+    //  previewThumbnails: { enabled: true, src: "" },
   }, // https://github.com/sampotts/plyr#options
   // Direct props for inner video tag (mdn.io/video)
 };
 
-export const VideoStream = () => (
-  <div className="player-wrapper">
-    <Plyr {...plyrProps} />
-    <div style={{ padding: "20px" }}>
-      <Editor />
+export const VideoStream = () => {
+  const ref = useRef<APITypes>();
+
+  return (
+    <div className="player-wrapper">
+      <Plyr ref={ref} {...plyrProps} />
+      <div style={{ padding: "20px" }}>
+        <Editor plyrRef={ref.current?.plyr as Plyr} />
+      </div>
     </div>
-  </div>
-);
+  );
+};
