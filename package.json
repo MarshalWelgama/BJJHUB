@@ -8,20 +8,26 @@
     "@mui/icons-material": "^5.10.15",
     "@mui/material": "latest",
     "@tiptap/extension-floating-menu": "^2.0.0-beta.207",
+    "@tiptap/extension-image": "^2.0.0-beta.207",
+    "@tiptap/extension-placeholder": "^2.0.0-beta.207",
     "@tiptap/react": "^2.0.0-beta.207",
     "@tiptap/starter-kit": "^2.0.0-beta.207",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "form-data": "^4.0.0",
     "node-sass": "^7.0.3",
-    "react": "latest",
-    "react-dom": "latest",
+    "plyr-react": "^5.1.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-dropzone-uploader": "^2.11.0",
     "react-player": "^2.11.0",
     "react-router-dom": "^6.4.3",
     "react-scripts": "latest",
+    "redux": "^4.2.0",
     "styled-components": "^5.3.6",
-    "typescript": "latest"
+    "typescript": "latest",
+    "video-react": "^0.16.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -42,6 +48,7 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.26"
+    "@types/styled-components": "^5.1.26",
+    "@types/video-react": "^0.15.1"
   }
 }

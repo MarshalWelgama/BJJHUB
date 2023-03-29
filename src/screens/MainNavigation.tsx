@@ -31,14 +31,20 @@ import StarBorder from "@mui/icons-material/StarBorder";
 import { UploadModal } from "../components/UploadModal";
 import Button from "@mui/material/Button";
 import Editor from "../components/Editor";
+import { Instructional } from "../components/Instructional";
+import AppBar from "@mui/material/AppBar";
+import "./VideoStream.css";
 
 const drawerWidth = 250;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
+  navbarActive: boolean;
   open?: boolean;
-}>(({ theme, open }) => ({
+}>(({ theme, open, navbarActive }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
+  opacity: navbarActive ? 0.1 : "",
+  filter: navbarActive ? "brightness(0.6) blur(2px)" : "",
+  // padding: theme.spacing(3),
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -53,55 +59,45 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   }),
 }));
 
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
-// const AppBar = styled(MuiAppBar, {
-//     shouldForwardProp: (prop) => prop !== 'open',
-// })<AppBarProps>(({ theme, open }) => ({
-//     transition: theme.transitions.create(['margin', 'width'], {
-//         easing: theme.transitions.easing.sharp,
-//         duration: theme.transitions.duration.leavingScreen,
-//     }),
-//     ...(open && {
-//         width: `calc(100% - ${drawerWidth}px)`,
-//         marginLeft: `${drawerWidth}px`,
-//         transition: theme.transitions.create(['margin', 'width'], {
-//             easing: theme.transitions.easing.easeOut,
-//             duration: theme.transitions.duration.enteringScreen,
-//         }),
-//     }),
-// }));
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: "flex-end",
-}));
-
-type NavProps = {
-  open: boolean;
-  handleDrawer: () => void;
-};
-export const MainNavigation: FunctionComponent<NavProps> = ({ open }) => {
+export const MainNavigation = () => {
   const theme = useTheme();
-
-  const [listOpen, setListOpen] = React.useState(true);
-  const [openModal, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const handleClick = () => {
-    setListOpen(!listOpen);
+  const handleDrawer = () => {
+    setOpen(!open);
   };
+
+  interface instructionals {
+    name: String;
+    volumes: string[];
+  }
+
+  const instructionalArr: instructionals[] = [
+    { name: "Systematicly Attacking", volumes: ["Vol1", "Vol2", "Vol3"] },
+    { name: "Go Further Faster", volumes: ["Vol1"] },
+    { name: "New Wave BJJ", volumes: ["Vol1", "Vol2"] },
+  ];
 
   return (
     <>
       <Box sx={{ display: "flex" }}>
+        <AppBar position="fixed">
+          <Toolbar style={{ minHeight: "46px" }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawer}
+              edge="start"
+              // sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              BJJFANATICS
+            </Typography>
+          </Toolbar>
+        </AppBar>
+
         <Drawer
           sx={{
             zIndex: theme.zIndex.appBar - 1,
@@ -109,14 +105,19 @@ export const MainNavigation: FunctionComponent<NavProps> = ({ open }) => {
             flexShrink: 0,
             "& .MuiDrawer-paper": {
               width: drawerWidth,
-              boxSizing: "border-box",
+              backgroundColor: "#212121",
+              border: "#212121",
+              marginTop: "45px",
             },
           }}
           variant="persistent"
           anchor="left"
           open={open}
         >
-          <DrawerHeader />
+          {/* {openModal && (
+            <UploadModal openModal={openModal} handleClose={handleClose} />
+          )} */}
+          <Divider style={{ backgroundColor: theme.palette.grey[800] }} />
           <List style={{ backgroundColor: theme.palette.grey[900] }}>
             <ListItem disablePadding>
               <ListItemButton onClick={handleOpen}>
@@ -124,67 +125,26 @@ export const MainNavigation: FunctionComponent<NavProps> = ({ open }) => {
                 <ListItemText primary={"Upload"} />
               </ListItemButton>
             </ListItem>
-          </List>
-          {openModal && (
-            <UploadModal openModal={openModal} handleClose={handleClose} />
-          )}
-          <Divider style={{ backgroundColor: theme.palette.grey[800] }} />
-          <List style={{ backgroundColor: theme.palette.grey[900] }}>
-            {[
-              "Systematicly Attacking",
-              "Go Further Faster",
-              "New Wave BJJ",
-            ].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <InboxIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
             <Divider style={{ backgroundColor: theme.palette.grey[800] }} />
-
-            <ListItemButton>
-              <ListItemIcon>
-                <SendIcon />
-              </ListItemIcon>
-              <ListItemText primary="Sent mail" />
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemIcon>
-                <DraftsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Drafts" />
-            </ListItemButton>
-            <ListItemButton onClick={handleClick}>
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary="Inbox" />
-              {listOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={listOpen} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemIcon>
-                    <StarBorder />
-                  </ListItemIcon>
-                  <ListItemText primary="Starred" />
-                </ListItemButton>
-              </List>
-            </Collapse>
+            <>
+              {instructionalArr.map((item, index) => {
+                return <Instructional name={item.name} videos={item.volumes} />;
+              })}
+            </>
           </List>
-          <div
-            style={{ height: "100%", backgroundColor: theme.palette.grey[900] }}
-          />
         </Drawer>
-        <Main open={open}>
-          <VideoStream />
-          <Editor />
-        </Main>
       </Box>
+
+      <Main
+        style={{
+          padding: "50px 0px 0px 0px",
+          transition: ".2s cubic-bezier(.4,0,.2,1)",
+        }}
+        open={true}
+        navbarActive={open}
+      >
+        <VideoStream />
+      </Main>
     </>
   );
 };

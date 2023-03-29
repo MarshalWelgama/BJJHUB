@@ -1,8 +1,15 @@
-.ProseMirror {
-  > * + * {
-    margin-top: 0.75em;
-  }
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #6e7378;
+  pointer-events: none;
+  height: 0;
+}
 
+.ProseMirror {
+  background-color: #212121;
+  padding-left: 8px;
+  padding-right: 8px;
   ul,
   ol {
     padding: 0 1rem;
@@ -32,17 +39,12 @@
 }
 
 .floating-menu {
-  display: flex;
-  background-color: #0d0d0d;
-  padding: 0.2rem;
-  border-radius: 0.5rem;
-
   button {
     color: #fff;
-    border: none;
-    background: none;
-    font-size: 0.85rem;
-    font-weight: 500;
+    border: 2px;
+    background: rgb(20, 20, 20);
+    font-size: 1rem;
+    font-weight: 200;
     padding: 0 0.2rem;
     opacity: 0.6;
 

@@ -4,6 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import App from "./App";
 import darkTheme from "./theme";
+import getDesignTokens from "./theme";
 import { dark } from "@mui/material/styles/createPalette";
 import { DarkMode } from "@mui/icons-material";
 

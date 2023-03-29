@@ -8,18 +8,29 @@ import {
 } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React from "react";
+import Image from "@tiptap/extension-image";
+import Placeholder from "@tiptap/extension-placeholder";
+import { Button } from "@mui/material";
 
 export default () => {
   const editor = useEditor({
-    extensions: [StarterKit],
-    content: `
-      <h1>
-        Notes
-      </h1>
-      <p>Add some notes...</p>
-
-    `,
+    extensions: [
+      StarterKit,
+      Image,
+      Placeholder.configure({
+        // Use a placeholder:
+        placeholder: "Add some notes...",
+      }),
+    ],
   });
+
+  const addImage = () => {
+    const url = window.prompt("URL");
+
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run();
+    }
+  };
 
   return (
     <>
@@ -51,42 +62,62 @@ export default () => {
       )}
 
       {editor && (
-        <FloatingMenu
-          className="floating-menu"
-          tippyOptions={{ duration: 100 }}
-          editor={editor}
-        >
-          <button
+        <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
+          <Button
+            variant="outlined"
+            sx={{
+              color: editor.isActive("heading", { level: 1 })
+                ? "white"
+                : "grey",
+              borderColor: editor.isActive("heading", { level: 1 })
+                ? "white"
+                : "grey",
+            }}
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 1 }).run()
             }
-            className={
-              editor.isActive("heading", { level: 1 }) ? "is-active" : ""
-            }
           >
             H1
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="outlined"
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 2 }).run()
             }
-            className={
-              editor.isActive("heading", { level: 2 }) ? "is-active" : ""
-            }
+            sx={{
+              color: editor.isActive("heading", { level: 2 })
+                ? "white"
+                : "grey",
+              borderColor: editor.isActive("heading", { level: 2 })
+                ? "white"
+                : "grey",
+            }}
           >
             H2
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="outlined"
             onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className={editor.isActive("bulletList") ? "is-active" : ""}
+            sx={{
+              color: editor.isActive("bulletList") ? "white" : "grey",
+              borderColor: editor.isActive("bulletList") ? "white" : "grey",
+            }}
           >
             Bullet List
-          </button>
-        </FloatingMenu>
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={addImage}
+            sx={{
+              color: editor.isActive("image") ? "white" : "grey",
+              borderColor: editor.isActive("image") ? "white" : "grey",
+            }}
+          >
+            Image
+          </Button>
+        </div>
       )}
-      <div style={{ backgroundColor: "#212121" }}>
-        <EditorContent editor={editor} />
-      </div>
+      <EditorContent editor={editor} />
     </>
   );
 };
