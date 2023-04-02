@@ -10,9 +10,12 @@ import StarterKit from "@tiptap/starter-kit";
 import React from "react";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
+import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 
 export const Editor = ({ plyrRef }: { plyrRef: Plyr }) => {
+  const [open, setOpenn] = React.useState(false);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -32,7 +35,7 @@ export const Editor = ({ plyrRef }: { plyrRef: Plyr }) => {
     }
   };
 
-  return (
+  return open ? (
     <>
       {editor && (
         <BubbleMenu
@@ -64,14 +67,14 @@ export const Editor = ({ plyrRef }: { plyrRef: Plyr }) => {
       {editor && (
         <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
           <Button
-            variant="outlined"
+            variant="contained"
             sx={{
-              color: editor.isActive("heading", { level: 1 })
+              backgroundColor: editor.isActive("heading", { level: 1 })
                 ? "white"
                 : "grey",
-              borderColor: editor.isActive("heading", { level: 1 })
-                ? "white"
-                : "#5e80df;",
+              // borderColor: editor.isActive("heading", { level: 1 })
+              //   ? "white"
+              //   : "#5e80df;",
             }}
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 1 }).run()
@@ -80,50 +83,50 @@ export const Editor = ({ plyrRef }: { plyrRef: Plyr }) => {
             H1
           </Button>
           <Button
-            variant="outlined"
+            variant="contained"
             onClick={() => {
               editor.chain().focus().toggleHeading({ level: 2 }).run();
               console.log(plyrRef.currentTime);
             }}
             sx={{
-              color: editor.isActive("heading", { level: 2 })
+              backgroundColor: editor.isActive("heading", { level: 2 })
                 ? "white"
                 : "grey",
-              borderColor: editor.isActive("heading", { level: 2 })
-                ? "white"
-                : "#5e80df",
+              // borderColor: editor.isActive("heading", { level: 2 })
+              //   ? "white"
+              //   : "#5e80df",
             }}
           >
             H2
           </Button>
           <Button
-            variant="outlined"
+            variant="contained"
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             sx={{
-              color: editor.isActive("bulletList") ? "white" : "grey",
-              borderColor: editor.isActive("bulletList") ? "white" : "#5e80df",
+              backgroundColor: editor.isActive("bulletList") ? "white" : "grey",
+              // borderColor: editor.isActive("bulletList") ? "white" : "#5e80df",
             }}
           >
             Bullet List
           </Button>
           <Button
-            variant="outlined"
+            variant="contained"
             onClick={addImage}
             sx={{
-              color: editor.isActive("image") ? "white" : "grey",
-              borderColor: editor.isActive("image") ? "white" : "#5e80df",
+              backgroundColor: editor.isActive("image") ? "white" : "grey",
+              // borderColor: editor.isActive("image") ? "white" : "#5e80df",
             }}
           >
             Image
           </Button>
           <Button
-            variant="outlined"
+            variant="contained"
             onClick={() => {
               console.log(plyrRef.currentTime);
             }}
             sx={{
-              color: "grey",
-              borderColor: "#5e80df",
+              backgroundColor: "grey",
+              // borderColor: "#5e80df",
             }}
           >
             Current Time
@@ -132,5 +135,15 @@ export const Editor = ({ plyrRef }: { plyrRef: Plyr }) => {
       )}
       <EditorContent editor={editor} />
     </>
+  ) : (
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <IconButton
+        color="inherit"
+        onClick={() => setOpenn(!open)}
+        // sx={{ mr: 2, ...(open && { display: 'none' }) }}
+      >
+        <ArrowDropDown />
+      </IconButton>
+    </div>
   );
 };

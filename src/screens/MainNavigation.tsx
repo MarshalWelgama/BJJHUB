@@ -43,7 +43,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 
 export const MainNavigation = () => {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleDrawer = () => {
     setOpen(!open);
@@ -63,7 +63,11 @@ export const MainNavigation = () => {
   return (
     <>
       <Box sx={{ display: "flex" }}>
-        <AppBar position="fixed">
+        <AppBar
+          position="fixed"
+          sx={{ backgroundColor: "black", color: "white" }}
+          enableColorOnDark
+        >
           <Toolbar style={{ minHeight: "46px" }}>
             <IconButton
               color="inherit"

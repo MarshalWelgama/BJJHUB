@@ -8,6 +8,7 @@ import { MainNavigation } from "./screens/MainNavigation";
 import { AppBar, IconButton, Toolbar, Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { OpenInBrowserSharp } from "@mui/icons-material";
+import "./styles.css";
 
 export default function App() {
   return (

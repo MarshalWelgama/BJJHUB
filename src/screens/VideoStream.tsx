@@ -3,6 +3,8 @@ import React, { FunctionComponent, useRef } from "react"; // importing FunctionC
 import "plyr-react/plyr.css";
 import "./VideoStream.css";
 import { Editor } from "../components/Editor";
+import { Paper } from "@mui/material";
+import VideoDescription from "../components/VideoDescription";
 
 const plyrProps: any = {
   source: {
@@ -36,7 +38,10 @@ export const VideoStream = () => {
   return (
     <div className="player-wrapper">
       <Plyr ref={ref} {...plyrProps} />
-      <div style={{ padding: "20px" }}>
+      <Paper sx={{ textAlign: "center" }} elevation={0}>
+        <VideoDescription />
+      </Paper>
+      <div style={{ padding: "0px 20px 20px 20px" }}>
         <Editor plyrRef={ref.current?.plyr as Plyr} />
       </div>
     </div>
