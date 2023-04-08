@@ -6,18 +6,23 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
+import { nowPlaying } from "../types";
 
-export default function VideoDescription() {
+export default function VideoDescription({
+  nowPlaying,
+}: {
+  nowPlaying: nowPlaying;
+}) {
   return (
     <ListItem alignItems="flex-start">
       <ListItemAvatar sx={{ alignSelf: "center" }}>
         <Avatar sx={{ bgcolor: "red" }}>SA</Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary="Systematically Attacking The Guard"
+        primary={nowPlaying.name}
         secondary={
           <div>
-            <div>Volume 1</div>
+            <div>{nowPlaying.subName}</div>
             <div>
               {" "}
               <Typography

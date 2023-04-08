@@ -17,6 +17,7 @@ import UploadIcon from "@mui/icons-material/Upload";
 import { Instructional } from "../components/Instructional";
 import AppBar from "@mui/material/AppBar";
 import "./VideoStream.css";
+import { nowPlaying, volumes } from "../types";
 
 const drawerWidth = 250;
 
@@ -43,7 +44,12 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 
 export const MainNavigation = () => {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
+  const [nowPlaying, setNowPlaying] = React.useState<nowPlaying>({
+    name: "Systematicly Attacking",
+    subName: "Vol1",
+    url: "https://store1.gofile.io/download/direct/5f3cc675-bf41-4fea-b4ea-23bce53afd00/Half-Guard%20Passing%20by%20Gordon%20Ryan%2010.mp4",
+  });
   const handleOpen = () => setOpen(true);
   const handleDrawer = () => {
     setOpen(!open);
@@ -51,13 +57,32 @@ export const MainNavigation = () => {
 
   interface instructionals {
     name: String;
-    volumes: string[];
+    volumes: volumes[];
   }
 
   const instructionalArr: instructionals[] = [
-    { name: "Systematicly Attacking", volumes: ["Vol1", "Vol2", "Vol3"] },
-    { name: "Go Further Faster", volumes: ["Vol1"] },
-    { name: "New Wave BJJ", volumes: ["Vol1", "Vol2"] },
+    {
+      name: "Systematicly Attacking",
+      volumes: [
+        {
+          volume: "Vol1",
+          url: "https://store1.gofile.io/download/direct/5f3cc675-bf41-4fea-b4ea-23bce53afd00/Half-Guard%20Passing%20by%20Gordon%20Ryan%2010.mp4",
+        },
+        { volume: "Vol2", url: "" },
+        {
+          volume: "Vol3",
+          url: "https://store1.gofile.io/download/direct/5f3cc675-bf41-4fea-b4ea-23bce53afd00/Half-Guard%20Passing%20by%20Gordon%20Ryan%2010.mp4",
+        },
+      ],
+    },
+    { name: "Go Further Faster", volumes: [{ volume: "Vol1", url: "" }] },
+    {
+      name: "New Wave BJJ",
+      volumes: [
+        { volume: "Vol1", url: "" },
+        { volume: "Vol2", url: "" },
+      ],
+    },
   ];
 
   return (
@@ -79,7 +104,7 @@ export const MainNavigation = () => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              BJJFANATICS
+              BJJHUB
             </Typography>
           </Toolbar>
         </AppBar>
@@ -114,7 +139,13 @@ export const MainNavigation = () => {
             <Divider style={{ backgroundColor: theme.palette.grey[800] }} />
             <>
               {instructionalArr.map((item, index) => {
-                return <Instructional name={item.name} videos={item.volumes} />;
+                return (
+                  <Instructional
+                    name={item.name}
+                    videos={item.volumes}
+                    handleNowPlaying={setNowPlaying}
+                  />
+                );
               })}
             </>
           </List>
@@ -129,7 +160,7 @@ export const MainNavigation = () => {
         open={true}
         navbarActive={open}
       >
-        <VideoStream />
+        <VideoStream nowPlaying={nowPlaying} />
       </Main>
     </>
   );

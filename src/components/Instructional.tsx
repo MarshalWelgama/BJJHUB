@@ -4,22 +4,23 @@ import Collapse from "@mui/material/Collapse/Collapse";
 import ListItemButton from "@mui/material/ListItemButton/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon/ListItemIcon";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { FunctionComponent } from "react";
+import { nowPlaying, volumes } from "../types";
 
 export const Instructional = ({
   name,
   videos,
+  handleNowPlaying,
 }: {
   name: any;
-  videos: string[];
+  videos: volumes[];
+  handleNowPlaying: Dispatch<SetStateAction<nowPlaying>>;
 }) => {
   const [listOpen, setListOpen] = React.useState(true);
   const handleClick = () => {
     setListOpen(!listOpen);
   };
-  console.log(name);
-  console.log(videos);
   return (
     <>
       <ListItemButton onClick={handleClick}>
@@ -31,13 +32,22 @@ export const Instructional = ({
       </ListItemButton>
       <Collapse in={listOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {videos.map((video: string) => {
+          {videos.map((video: volumes) => {
             return (
-              <ListItemButton sx={{ pl: 4 }}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() =>
+                  handleNowPlaying({
+                    name: name,
+                    subName: video.volume,
+                    url: video.url,
+                  })
+                }
+              >
                 <ListItemIcon>
                   <StarBorder />
                 </ListItemIcon>
-                <ListItemText primary={video} />
+                <ListItemText primary={video.volume} />
               </ListItemButton>
             );
           })}
