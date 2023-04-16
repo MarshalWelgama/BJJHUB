@@ -12,10 +12,12 @@ export const Instructional = ({
   name,
   videos,
   handleNowPlaying,
+  closeSideBar,
 }: {
   name: any;
   videos: volumes[];
-  handleNowPlaying: Dispatch<SetStateAction<nowPlaying>>;
+  handleNowPlaying: (nowPlaying: nowPlaying) => void;
+  closeSideBar: () => void;
 }) => {
   const [listOpen, setListOpen] = React.useState(true);
   const handleClick = () => {
@@ -36,13 +38,14 @@ export const Instructional = ({
             return (
               <ListItemButton
                 sx={{ pl: 4 }}
-                onClick={() =>
+                onClick={() => {
+                  closeSideBar();
                   handleNowPlaying({
                     name: name,
                     subName: video.volume,
                     url: video.url,
-                  })
-                }
+                  });
+                }}
               >
                 <ListItemIcon>
                   <StarBorder />
