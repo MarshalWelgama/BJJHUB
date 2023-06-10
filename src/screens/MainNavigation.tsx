@@ -1,14 +1,20 @@
 import * as React from "react";
 import "./VideoStream.css";
-import { instructionals, nowPlaying, volumes } from "../types";
+import { instructionals, nowPlaying } from "../types";
 import { AppBarComponent } from "../components/AppBar";
 import { SideBarComponent } from "../components/SideBar";
 
 export interface NavigationBarProps {
+  loading: Function;
   onVideoSelect: (nowPlaying: nowPlaying) => void;
+  data: instructionals[];
 }
 
-export const MainNavigation = ({ onVideoSelect }: NavigationBarProps) => {
+export const MainNavigation = ({
+  onVideoSelect,
+  loading,
+  data,
+}: NavigationBarProps) => {
   const [open, setOpen] = React.useState(false);
   const handleDrawer = () => {
     setOpen(!open);
@@ -43,7 +49,7 @@ export const MainNavigation = ({ onVideoSelect }: NavigationBarProps) => {
     <>
       <AppBarComponent onOpen={handleDrawer} />
       <SideBarComponent
-        instructionalArr={instructionalArr}
+        instructionalArr={data ?? instructionalArr}
         openSideBar={open}
         closeSideBar={handleDrawer}
         onVideoSelect={onVideoSelect}

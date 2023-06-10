@@ -3,10 +3,10 @@ import { ListItemText, List } from "@mui/material";
 import Collapse from "@mui/material/Collapse/Collapse";
 import ListItemButton from "@mui/material/ListItemButton/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon/ListItemIcon";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import React, { Dispatch, SetStateAction } from "react";
-import { FunctionComponent } from "react";
+import React from "react";
 import { nowPlaying, volumes } from "../types";
+import CloudIcon from "@mui/icons-material/Cloud";
+import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
 
 export const Instructional = ({
   name,
@@ -19,7 +19,7 @@ export const Instructional = ({
   handleNowPlaying: (nowPlaying: nowPlaying) => void;
   closeSideBar: () => void;
 }) => {
-  const [listOpen, setListOpen] = React.useState(true);
+  const [listOpen, setListOpen] = React.useState(false);
   const handleClick = () => {
     setListOpen(!listOpen);
   };
@@ -27,7 +27,7 @@ export const Instructional = ({
     <>
       <ListItemButton onClick={handleClick}>
         <ListItemIcon>
-          <InboxIcon />
+          <CloudIcon />
         </ListItemIcon>
         <ListItemText primary={name} />
         {listOpen ? <ExpandLess /> : <ExpandMore />}
@@ -48,7 +48,7 @@ export const Instructional = ({
                 }}
               >
                 <ListItemIcon>
-                  <StarBorder />
+                  <PlayCircleOutlinedIcon />
                 </ListItemIcon>
                 <ListItemText primary={video.volume} />
               </ListItemButton>

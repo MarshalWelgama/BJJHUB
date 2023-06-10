@@ -43,14 +43,6 @@ export const VideoStream = ({ nowPlaying }: { nowPlaying: nowPlaying }) => {
       <Paper sx={{ textAlign: "center" }} elevation={0}>
         <VideoDescription nowPlaying={nowPlaying} />
       </Paper>
-      <button
-        onClick={async () => {
-          await getContent("7ce5f426-0a7d-46e3-82c2-8870129940ff");
-        }}
-      >
-        {" "}
-        dklasj
-      </button>
       <div style={{ padding: "0px 20px 20px 20px" }}>
         <Editor plyrRef={ref.current?.plyr as Plyr} />
       </div>

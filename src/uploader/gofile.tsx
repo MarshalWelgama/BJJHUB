@@ -39,7 +39,7 @@ const uploadFile = async (
   }
 };
 
-export const getContent = async (contentId: string): Promise<string> => {
+export const getContent = async (contentId: string): Promise<any> => {
   //input parent folder
   return fetch(
     `https://api.gofile.io/getContent?contentId=${contentId}&token=${TOKEN}`
