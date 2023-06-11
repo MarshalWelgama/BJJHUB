@@ -11,7 +11,7 @@ export const AppBarComponent = ({ onOpen }: { onOpen: () => void }) => {
   return (
     <AppBar
       position="fixed"
-      sx={{ backgroundColor: "black", color: "white" }}
+      sx={{ backgroundColor: "#121213", color: "white" }}
       enableColorOnDark
     >
       <Toolbar style={{ minHeight: "46px" }}>
@@ -22,7 +22,7 @@ export const AppBarComponent = ({ onOpen }: { onOpen: () => void }) => {
           edge="start"
           // sx={{ mr: 2, ...(open && { display: 'none' }) }}
         >
-          <MenuIcon />
+          <MenuIcon color="primary" />
         </IconButton>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           BJJHUB

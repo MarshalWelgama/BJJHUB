@@ -65,7 +65,7 @@ const App: React.FC = () => {
 
   const formatInstructional = (content: {}[], name: string): instructionals => {
     const volumes: volumes[] = content.map((e: any) => ({
-      volume: e.name,
+      volume: e.name.split(".")[0],
       url: e.directLink,
     }));
 
@@ -88,6 +88,7 @@ const App: React.FC = () => {
               onVideoSelect={handleVideoSelect}
               loading={setLoading}
               data={contentArray}
+              currentPlaying={nowPlaying}
             />
             <Routes>
               <Route

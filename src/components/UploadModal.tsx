@@ -5,29 +5,8 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import { useDropzone } from "react-dropzone";
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  TextField,
-} from "@mui/material";
-
-function MyDropzone() {
-  const onDrop = useCallback((acceptedFiles: any) => {
-    console.log(acceptedFiles);
-    // Do something with the files
-  }, []);
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
-
-  return (
-    <Box component="span" {...getRootProps()}>
-      <input {...getInputProps()} />
-
-      <Button variant="contained">Select files to upload</Button>
-    </Box>
-  );
-}
+import { Button, FormGroup, TextField } from "@mui/material";
+import { createFolder, postData } from "../uploader/gofile";
 
 const style = {
   position: "absolute" as "absolute",
@@ -50,8 +29,29 @@ export const UploadModal: React.FunctionComponent<ModalProps> = ({
   handleClose,
 }) => {
   const [textValue, setTextValue] = useState<string>("");
+  const [fileUpload, setFileUpload] = useState<File>();
+  function MyDropzone() {
+    const onDrop = useCallback((acceptedFiles: any) => {
+      setFileUpload(acceptedFiles[0]);
+    }, []);
+    const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+    return (
+      <Box component="span" {...getRootProps()}>
+        <input {...getInputProps()} />
+        <Button variant="contained">Select file to upload</Button>
+      </Box>
+    );
+  }
+
   const onTextChange = (e: any) => setTextValue(e.target.value);
-  const handleSubmit = () => console.log(textValue);
+  const handleSubmit = async () => {
+    const folderId = await createFolder(textValue);
+    if (fileUpload) {
+      postData(fileUpload, folderId);
+    }
+    handleClose();
+  };
   const handleReset = () => setTextValue("");
   return (
     <Modal
@@ -68,18 +68,59 @@ export const UploadModal: React.FunctionComponent<ModalProps> = ({
       <Fade in={openModal}>
         <Box sx={style}>
           <FormGroup></FormGroup>
-          <Typography> UPLOAD FILES</Typography>
-          <Typography> Category Name </Typography>
-          <TextField onChange={onTextChange} value={textValue} />
-          <MyDropzone />
-          <FormControlLabel
-            control={<Checkbox defaultChecked />}
-            label="Do you want to rename files?"
-          />
-          <TextField onChange={onTextChange} value={textValue} />
+          <Typography
+            variant="h5"
+            style={{ display: "flex", justifyContent: "center" }}
+          >
+            {" "}
+            UPLOAD FILES
+          </Typography>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "auto auto",
+              gridGap: "20px",
+              padding: "20px",
+            }}
+          >
+            <Typography
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {" "}
+              Instructional Name{" "}
+            </Typography>
 
-          <Button onClick={handleSubmit}>Submit</Button>
-          <Button onClick={handleReset}>Reset</Button>
+            <div>
+              <TextField
+                sx={{
+                  fieldset: { borderColor: "#757676" },
+                }}
+                color="secondary"
+                onChange={onTextChange}
+                value={textValue}
+              />
+            </div>
+
+            <Typography
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {" "}
+              File
+            </Typography>
+            <MyDropzone />
+          </div>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button onClick={handleSubmit}>Submit</Button>
+            <Button onClick={handleReset}>Reset</Button>
+          </div>
         </Box>
       </Fade>
     </Modal>

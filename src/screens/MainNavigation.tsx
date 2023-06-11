@@ -8,12 +8,14 @@ export interface NavigationBarProps {
   loading: Function;
   onVideoSelect: (nowPlaying: nowPlaying) => void;
   data: instructionals[];
+  currentPlaying: nowPlaying;
 }
 
 export const MainNavigation = ({
   onVideoSelect,
   loading,
   data,
+  currentPlaying,
 }: NavigationBarProps) => {
   const [open, setOpen] = React.useState(false);
   const handleDrawer = () => {
@@ -53,6 +55,7 @@ export const MainNavigation = ({
         openSideBar={open}
         closeSideBar={handleDrawer}
         onVideoSelect={onVideoSelect}
+        currentPlaying={currentPlaying}
       />
     </>
   );

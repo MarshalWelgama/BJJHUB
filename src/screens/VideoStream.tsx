@@ -32,6 +32,8 @@ export const VideoStream = ({ nowPlaying }: { nowPlaying: nowPlaying }) => {
       disableContextMenu: true,
       markers: { enabled: true, points: [{ time: 30, label: "test" }] },
       tooltips: { controls: false, seek: true },
+      style: {},
+
       //  previewThumbnails: { enabled: true, src: "" },
     }, // https://github.com/sampotts/plyr#options
     // Direct props for inner video tag (mdn.io/video)

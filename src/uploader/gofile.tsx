@@ -1,4 +1,4 @@
-import { TOKEN } from "../utils/constants";
+import { ROOTFOLDER, TOKEN } from "../utils/constants";
 
 let server: string | undefined;
 
@@ -55,6 +55,47 @@ export const getContent = async (contentId: string): Promise<any> => {
     });
 };
 
-const createFolder = () => {};
+export const createFolder = async (folderName: string) => {
+  return new Promise<string>((resolve, reject) => {
+    fetch("https://api.gofile.io/createFolder", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        parentFolderId: ROOTFOLDER,
+        token: TOKEN,
+        folderName: folderName,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "ok") {
+          console.log("Folder created successfully");
+          resolve(data.data.id); // Resolve with data.data.id
+        } else {
+          reject(new Error("Folder creation failed"));
+        }
+      })
+      .catch((error) => reject(error));
+  });
+};
 
+export const postData = async (file: File | undefined, folder: string) => {
+  const formData = new FormData();
+  formData.append("file", file!);
+  formData.append("token", TOKEN);
+  formData.append("folderId", folder);
+  fetch("https://store1.gofile.io/uploadFile", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === "ok") {
+        console.log(data.data);
+      }
+    })
+    .catch((error) => console.error(error));
+};
 const deleteContent = () => {};

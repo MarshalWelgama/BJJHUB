@@ -13,13 +13,16 @@ export const Instructional = ({
   videos,
   handleNowPlaying,
   closeSideBar,
+  currentPlaying,
 }: {
   name: any;
   videos: volumes[];
   handleNowPlaying: (nowPlaying: nowPlaying) => void;
   closeSideBar: () => void;
+  currentPlaying: nowPlaying;
 }) => {
   const [listOpen, setListOpen] = React.useState(false);
+  const [iconColor, setIconColor] = React.useState(false);
   const handleClick = () => {
     setListOpen(!listOpen);
   };
@@ -27,7 +30,9 @@ export const Instructional = ({
     <>
       <ListItemButton onClick={handleClick}>
         <ListItemIcon>
-          <CloudIcon />
+          <CloudIcon
+            color={currentPlaying.name === name ? "primary" : "secondary"}
+          />
         </ListItemIcon>
         <ListItemText primary={name} />
         {listOpen ? <ExpandLess /> : <ExpandMore />}
@@ -48,7 +53,13 @@ export const Instructional = ({
                 }}
               >
                 <ListItemIcon>
-                  <PlayCircleOutlinedIcon />
+                  <PlayCircleOutlinedIcon
+                    color={
+                      currentPlaying.subName === video.volume
+                        ? "primary"
+                        : "secondary"
+                    }
+                  />
                 </ListItemIcon>
                 <ListItemText primary={video.volume} />
               </ListItemButton>
