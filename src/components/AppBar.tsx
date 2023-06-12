@@ -12,6 +12,7 @@ export const AppBarComponent = ({ onOpen }: { onOpen: () => void }) => {
     <AppBar
       position="fixed"
       sx={{ backgroundColor: "#121213", color: "white" }}
+      color="secondary"
       enableColorOnDark
     >
       <Toolbar style={{ minHeight: "46px" }}>

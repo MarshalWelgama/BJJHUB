@@ -22,7 +22,6 @@ export const Instructional = ({
   currentPlaying: nowPlaying;
 }) => {
   const [listOpen, setListOpen] = React.useState(false);
-  const [iconColor, setIconColor] = React.useState(false);
   const handleClick = () => {
     setListOpen(!listOpen);
   };
@@ -39,7 +38,7 @@ export const Instructional = ({
       </ListItemButton>
       <Collapse in={listOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {videos.map((video: volumes) => {
+          {videos.map((video: volumes, index: number) => {
             return (
               <ListItemButton
                 sx={{ pl: 4 }}
@@ -49,6 +48,10 @@ export const Instructional = ({
                     name: name,
                     subName: video.volume,
                     url: video.url,
+                    upNext:
+                      videos[index + 1] && videos[index + 1].volume
+                        ? videos[index + 1].volume
+                        : undefined,
                   });
                 }}
               >

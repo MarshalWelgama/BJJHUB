@@ -6,7 +6,8 @@ import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import { useDropzone } from "react-dropzone";
 import { Button, FormGroup, TextField } from "@mui/material";
-import { createFolder, postData } from "../uploader/gofile";
+import { createFolder, getContent, postData } from "../uploader/gofile";
+import { BasicMenu } from "./basicMenu";
 
 const style = {
   position: "absolute" as "absolute",
@@ -29,6 +30,7 @@ export const UploadModal: React.FunctionComponent<ModalProps> = ({
   handleClose,
 }) => {
   const [textValue, setTextValue] = useState<string>("");
+  const [selectedFolder, setSelectedFolder] = useState<string>("");
   const [fileUpload, setFileUpload] = useState<File>();
   function MyDropzone() {
     const onDrop = useCallback((acceptedFiles: any) => {
@@ -46,13 +48,13 @@ export const UploadModal: React.FunctionComponent<ModalProps> = ({
 
   const onTextChange = (e: any) => setTextValue(e.target.value);
   const handleSubmit = async () => {
-    const folderId = await createFolder(textValue);
+    const folderId =
+      selectedFolder || (textValue && (await createFolder(textValue)));
     if (fileUpload) {
       postData(fileUpload, folderId);
     }
     handleClose();
   };
-  const handleReset = () => setTextValue("");
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -119,7 +121,10 @@ export const UploadModal: React.FunctionComponent<ModalProps> = ({
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Button onClick={handleSubmit}>Submit</Button>
-            <Button onClick={handleReset}>Reset</Button>
+            <BasicMenu
+              setInputValue={setTextValue}
+              setSelectedFolder={setSelectedFolder}
+            />
           </div>
         </Box>
       </Fade>

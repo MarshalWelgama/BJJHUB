@@ -9,9 +9,10 @@ import "./app.css";
 
 const App: React.FC = () => {
   const [nowPlaying, setNowPlaying] = useState<nowPlaying>({
-    name: "MAIN PAGE",
-    subName: "DEFAULT",
+    name: "",
+    subName: "",
     url: "",
+    hidden: true,
   });
   const [loading, setLoading] = useState(true);
   const [contentArray, setContentArray] = useState<instructionals[]>([]);

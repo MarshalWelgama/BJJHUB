@@ -21,24 +21,6 @@ export const getServer = async (): Promise<string> => {
     });
 };
 
-const uploadFile = async (
-  file: File,
-  server: string = "store1"
-): Promise<any> => {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  try {
-    const response = await fetch(`https://${server}.gofile.io/uploadFile`, {
-      method: "POST",
-      body: formData,
-    });
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 export const getContent = async (contentId: string): Promise<any> => {
   //input parent folder
   return fetch(
@@ -82,13 +64,41 @@ export const createFolder = async (folderName: string) => {
 };
 
 export const postData = async (file: File | undefined, folder: string) => {
+  const server = await getServer();
   const formData = new FormData();
   formData.append("file", file!);
   formData.append("token", TOKEN);
   formData.append("folderId", folder);
-  fetch("https://store1.gofile.io/uploadFile", {
+  fetch(`https://${server}.gofile.io/uploadFile`, {
     method: "POST",
     body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === "ok") {
+        console.log(data.data);
+        return data.data.fileId;
+      } else throw new Error("Error Occured");
+    })
+    .then((fileId) => {
+      console.log("file id is: " + fileId);
+      setOption(fileId);
+    })
+    .catch((error) => console.error(error));
+};
+
+const setOption = async (fileId: string) => {
+  fetch("https://api.gofile.io/setOption", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      contentId: fileId,
+      token: TOKEN,
+      option: "directLink",
+      value: "true",
+    }),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -98,4 +108,3 @@ export const postData = async (file: File | undefined, folder: string) => {
     })
     .catch((error) => console.error(error));
 };
-const deleteContent = () => {};
