@@ -17,21 +17,28 @@ import { Instructional } from "../components/Instructional";
 import AppBar from "@mui/material/AppBar";
 import { volumes, nowPlaying, instructionals } from "../types";
 import { NavigationBarProps } from "../screens/MainNavigation";
+import { UploadModal } from "./UploadModal";
 
 export const SideBarComponent = ({
   instructionalArr,
   openSideBar,
   onVideoSelect,
   closeSideBar,
+  currentPlaying,
 }: {
   instructionalArr: instructionals[];
   openSideBar: boolean;
   onVideoSelect: (nowPlaying: nowPlaying) => void;
   closeSideBar: () => void;
+  currentPlaying: nowPlaying;
 }) => {
   const theme = useTheme();
   const drawerWidth = 250;
+  const [openModal, setOpenModal] = React.useState(false);
 
+  const handleClose = () => {
+    setOpenModal(!openModal);
+  };
   return (
     <Box sx={{ display: "flex" }}>
       <Drawer
@@ -41,8 +48,6 @@ export const SideBarComponent = ({
           flexShrink: 0,
           "& .MuiDrawer-paper": {
             width: drawerWidth,
-            background: "#212121",
-            border: "#212121",
             marginTop: "45px",
           },
         }}
@@ -50,18 +55,18 @@ export const SideBarComponent = ({
         open={openSideBar}
         onClose={closeSideBar}
       >
-        {/* {openModal && (
-            <UploadModal openModal={openModal} handleClose={handleClose} />
-          )} */}
-        <Divider style={{ backgroundColor: theme.palette.grey[800] }} />
-        <List style={{ backgroundColor: theme.palette.grey[900] }}>
+        {openModal && (
+          <UploadModal openModal={openModal} handleClose={handleClose} />
+        )}
+        <Divider />
+        <List>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => console.log("handleOpen")}>
-              <ListItemIcon>{<UploadIcon />}</ListItemIcon>
+            <ListItemButton onClick={() => setOpenModal(true)}>
+              <ListItemIcon>{<UploadIcon color="primary" />}</ListItemIcon>
               <ListItemText primary={"Upload"} />
             </ListItemButton>
           </ListItem>
-          <Divider style={{ backgroundColor: theme.palette.grey[800] }} />
+          <Divider color="primary" />
           <>
             {instructionalArr.map((item, index) => {
               return (
@@ -70,6 +75,7 @@ export const SideBarComponent = ({
                   videos={item.volumes}
                   handleNowPlaying={onVideoSelect}
                   closeSideBar={closeSideBar}
+                  currentPlaying={currentPlaying}
                 />
               );
             })}

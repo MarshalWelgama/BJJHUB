@@ -13,7 +13,7 @@ export const VideoStream = ({ nowPlaying }: { nowPlaying: nowPlaying }) => {
   const plyrProps: any = {
     source: {
       type: "video",
-      title: "Example title",
+      title: nowPlaying.subName,
       sources: [
         {
           src: nowPlaying.url,
@@ -31,6 +31,8 @@ export const VideoStream = ({ nowPlaying }: { nowPlaying: nowPlaying }) => {
       disableContextMenu: true,
       markers: { enabled: true, points: [{ time: 30, label: "test" }] },
       tooltips: { controls: false, seek: true },
+      style: {},
+
       //  previewThumbnails: { enabled: true, src: "" },
     }, // https://github.com/sampotts/plyr#options
     // Direct props for inner video tag (mdn.io/video)
@@ -38,13 +40,17 @@ export const VideoStream = ({ nowPlaying }: { nowPlaying: nowPlaying }) => {
 
   return (
     <div className="player-wrapper">
-      <Plyr ref={ref} {...plyrProps} />
-      <Paper sx={{ textAlign: "center" }} elevation={0}>
-        <VideoDescription nowPlaying={nowPlaying} />
-      </Paper>
-      <div style={{ padding: "0px 20px 20px 20px" }}>
-        <Editor plyrRef={ref.current?.plyr as Plyr} />
-      </div>
+      {!nowPlaying.hidden && (
+        <>
+          <Plyr ref={ref} {...plyrProps} />
+          <Paper sx={{ textAlign: "center" }} elevation={0}>
+            <VideoDescription nowPlaying={nowPlaying} />
+          </Paper>
+          <div style={{ padding: "0px 20px 20px 20px" }}>
+            <Editor plyrRef={ref.current?.plyr as Plyr} />
+          </div>
+        </>
+      )}
     </div>
   );
 };

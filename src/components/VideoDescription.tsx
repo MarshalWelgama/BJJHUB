@@ -25,15 +25,30 @@ export default function VideoDescription({
             <div>{nowPlaying.subName}</div>
             <div>
               {" "}
-              <Typography
-                sx={{ display: "inline" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Up Next:
-              </Typography>{" "}
-              Volume 2
+              {nowPlaying.upNext ? (
+                <>
+                  <Typography
+                    sx={{ display: "inline" }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    Up Next:
+                  </Typography>{" "}
+                  {nowPlaying.upNext}
+                </>
+              ) : (
+                <>
+                  <Typography
+                    sx={{ display: "inline" }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    Instructional Complete
+                  </Typography>
+                </>
+              )}
             </div>
           </div>
         }

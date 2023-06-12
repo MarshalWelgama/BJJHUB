@@ -1,0 +1,87 @@
+{
+  "user": {
+    "id_in_store": { "bjj": 1047073816674, "wrestling": 3214296252450 },
+    "email": "marshalwelgama@gmail.com",
+    "product_authors": [
+      "Adam Wardzinski",
+      "Andrew Wiltse",
+      "Ariel Tabak",
+      "Craig Jones",
+      "Gordon Ryan",
+      "John Danaher",
+      "Lachlan Giles",
+      "Tom DeBlass"
+    ],
+    "product_sites": ["bjjfanatics.com", "fanaticwrestling.com"],
+    "product_categories": [
+      "Butterfly Guard",
+      "Conditioning",
+      "Drills",
+      "Folkstyle",
+      "Freestyle",
+      "Fundamentals",
+      "Guard",
+      "Guard_Passing",
+      "Guards",
+      "Half Guard",
+      "Leg Attacks",
+      "Submissions",
+      "Takedowns",
+      "Throws"
+    ],
+    "videos_wrestling": ["4594563973154"],
+    "active_subscription": false,
+    "created_at": "2018-12-02T20:52:35-05:00",
+    "last_name": "Welgama",
+    "id": 1047073816674,
+    "first_name": "Marshal",
+    "smile_io_id": 229858870,
+    "sites": ["bjjfanatics.com", "fanaticwrestling.com"],
+    "flowchart": [],
+    "products_az": [
+      "1333011152994",
+      "1913435127906",
+      "6839466721378",
+      "750825799778",
+      "4374754852962",
+      "6581458927714",
+      "4497857413218",
+      "751287468130",
+      "4594563973154"
+    ],
+    "product_dates": {
+      "751287468130": "2020-05-17T08:40:25-04:00",
+      "750825799778": "2020-03-31T06:56:33-04:00",
+      "4497857413218": "2020-10-14T05:03:35-04:00",
+      "4594563973154": "2020-08-10T16:57:18-04:00",
+      "6839466721378": "2023-03-18T19:34:49-04:00",
+      "1913435127906": "2018-12-02T20:55:04-05:00",
+      "6581458927714": "2021-09-11T07:33:35-04:00",
+      "4374754852962": "2020-03-20T20:50:32-04:00",
+      "1333011152994": "2018-12-08T04:33:08-05:00"
+    },
+    "products": [
+      "6839466721378",
+      "6581458927714",
+      "4497857413218",
+      "4594563973154",
+      "751287468130",
+      "750825799778",
+      "4374754852962",
+      "1333011152994",
+      "1913435127906"
+    ],
+    "videos_bjj": [
+      "6839466721378",
+      "6839466721378",
+      "6581458927714",
+      "4497857413218",
+      "751287468130",
+      "750825799778",
+      "4374754852962",
+      "1333011152994",
+      "1913435127906"
+    ],
+    "last_survey_answer": { "_seconds": 1679313528, "_nanoseconds": 78000000 }
+  }
+}
