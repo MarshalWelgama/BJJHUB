@@ -33,7 +33,7 @@ export const SideBarComponent = ({
   currentPlaying: nowPlaying;
 }) => {
   const theme = useTheme();
-  const drawerWidth = 250;
+  const drawerWidth = 350;
   const [openModal, setOpenModal] = React.useState(false);
 
   const handleClose = () => {
@@ -42,6 +42,7 @@ export const SideBarComponent = ({
   return (
     <Box sx={{ display: "flex" }}>
       <Drawer
+        //   ModalProps={{ disableScrollLock: true }}
         sx={{
           zIndex: theme.zIndex.appBar - 1,
           width: drawerWidth,

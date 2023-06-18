@@ -22,19 +22,21 @@ export const getServer = async (): Promise<string> => {
 };
 
 export const getContent = async (contentId: string): Promise<any> => {
-  //input parent folder
-  return fetch(
-    `https://api.gofile.io/getContent?contentId=${contentId}&token=${TOKEN}`
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status === "ok") {
-        return data.data;
-      } else throw new Error("Error: Something went wrong");
-    })
-    .catch((error) => {
-      throw error;
-    });
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    const res = await fetch(
+      `https://api.gofile.io/getContent?contentId=${contentId}&token=${TOKEN}`
+    );
+
+    if (!res.ok) {
+      throw new Error(`Fetch request failed with status ${res.status}`);
+    }
+
+    const result = await res.json();
+    return result.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const createFolder = async (folderName: string) => {
