@@ -10,7 +10,7 @@ type ResumePlaybackModalProps = {
 export const ResumePlaybackModal: FunctionComponent<
   ResumePlaybackModalProps
 > = ({ handleResumePlayback, nowPlaying, getPlyr }) => {
-  const [openModal, setOpenModal] = React.useState(true);
+  const [openModal, setOpenModal] = React.useState(false);
   const handleClose = () => {
     setOpenModal(!openModal);
   };
