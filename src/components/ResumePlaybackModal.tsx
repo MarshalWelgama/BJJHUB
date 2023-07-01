@@ -63,13 +63,7 @@ export const ResumePlaybackModal: FunctionComponent<
             Continue from{" "}
             {Math.round(
               Number(window.localStorage.getItem(nowPlaying.subName)) / 60
-            )}{" "}
-            (
-            {Math.round(Number(getPlyr().duration) / 60) -
-              Math.round(
-                Number(window.localStorage.getItem(nowPlaying.subName)) / 60
-              )}{" "}
-            min left)
+            )}
           </Button>
           <Button onClick={handleClose}>Start from beginning</Button>
         </div>
