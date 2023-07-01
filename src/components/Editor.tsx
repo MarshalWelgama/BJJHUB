@@ -13,7 +13,11 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { Button, IconButton } from "@mui/material";
 import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 
-export const Editor = ({ plyrRef }: { plyrRef: Plyr }) => {
+export const Editor = ({
+  getPlyrInstance,
+}: {
+  getPlyrInstance: () => Plyr;
+}) => {
   const [open, setOpenn] = React.useState(false);
 
   const editor = useEditor({
@@ -32,6 +36,14 @@ export const Editor = ({ plyrRef }: { plyrRef: Plyr }) => {
 
     if (url) {
       editor?.chain().focus().setImage({ src: url }).run();
+    }
+  };
+
+  const handleCurrentTime = () => {
+    const plyrInstance = getPlyrInstance();
+    if (plyrInstance) {
+      const currentTime = plyrInstance;
+      console.log(currentTime);
     }
   };
 
@@ -86,7 +98,6 @@ export const Editor = ({ plyrRef }: { plyrRef: Plyr }) => {
             variant="contained"
             onClick={() => {
               editor.chain().focus().toggleHeading({ level: 2 }).run();
-              console.log(plyrRef.currentTime);
             }}
             sx={{
               backgroundColor: editor.isActive("heading", { level: 2 })
@@ -121,9 +132,7 @@ export const Editor = ({ plyrRef }: { plyrRef: Plyr }) => {
           </Button>
           <Button
             variant="contained"
-            onClick={() => {
-              console.log(plyrRef.currentTime);
-            }}
+            onClick={handleCurrentTime}
             sx={{
               backgroundColor: "grey",
               // borderColor: "#5e80df",

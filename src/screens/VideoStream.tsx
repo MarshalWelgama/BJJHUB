@@ -1,14 +1,30 @@
 import Plyr, { APITypes } from "plyr-react";
-import React, { FunctionComponent, useRef } from "react"; // importing FunctionComponent
+import React, { useEffect, useRef } from "react"; // importing FunctionComponent
 import "plyr-react/plyr.css";
 import "./VideoStream.css";
 import { Editor } from "../components/Editor";
-import { Paper } from "@mui/material";
+import {
+  Backdrop,
+  Box,
+  Button,
+  Fade,
+  FormGroup,
+  Modal,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import VideoDescription from "../components/VideoDescription";
 import { nowPlaying } from "../types";
+import { BasicMenu } from "../components/basicMenu";
+import ResumePlaybackModal from "../components/ResumePlaybackModal";
 
 export const VideoStream = ({ nowPlaying }: { nowPlaying: nowPlaying }) => {
   const ref = useRef<APITypes>();
+
+  const getPlyrInstance = () => {
+    return ref.current?.plyr!;
+  };
 
   const plyrProps: any = {
     source: {
@@ -32,23 +48,59 @@ export const VideoStream = ({ nowPlaying }: { nowPlaying: nowPlaying }) => {
       markers: { enabled: true, points: [{ time: 30, label: "test" }] },
       tooltips: { controls: false, seek: true },
       style: {},
+      blankVideo: "nowPlaying.url",
 
       //  previewThumbnails: { enabled: true, src: "" },
     }, // https://github.com/sampotts/plyr#options
     // Direct props for inner video tag (mdn.io/video)
   };
 
+  window.onunload = function () {
+    window.localStorage[nowPlaying.subName] = getPlyrInstance().currentTime;
+  };
+
+  const handleResumePlayback = () => {
+    getPlyrInstance().currentTime = Number(
+      window.localStorage.getItem(nowPlaying.subName)
+    );
+    getPlyrInstance().once("loadeddata", (e) => {
+      getPlyrInstance().currentTime = Number(
+        window.localStorage.getItem(nowPlaying.subName)
+      );
+    });
+  };
+
+  const handleCurrentTime = () => {
+    console.log(getPlyrInstance().currentTime);
+  };
   return (
     <div className="player-wrapper">
       {!nowPlaying.hidden && (
         <>
-          <Plyr ref={ref} {...plyrProps} />
+          {" "}
+          {/* <Button onClick={handleCurrentTime}>Set Current Time</Button> */}
+          <Plyr
+            ref={ref}
+            {...plyrProps}
+            options={{
+              ...plyrProps.options,
+              // Add the event listener for the 'ready' event
+            }}
+            event={{
+              loadeddata: "loadeddata",
+            }}
+          />
           <Paper sx={{ textAlign: "center" }} elevation={0}>
             <VideoDescription nowPlaying={nowPlaying} />
           </Paper>
           <div style={{ padding: "0px 20px 20px 20px" }}>
-            <Editor plyrRef={ref.current?.plyr as Plyr} />
+            <Editor getPlyrInstance={getPlyrInstance} />
           </div>
+          <ResumePlaybackModal
+            handleResumePlayback={handleResumePlayback}
+            nowPlaying={nowPlaying}
+            getPlyr={getPlyrInstance}
+          />
         </>
       )}
     </div>
