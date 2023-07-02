@@ -74,7 +74,7 @@ export const VideoStream = ({ nowPlaying }: { nowPlaying: nowPlaying }) => {
       window.onpagehide = null;
       window.removeEventListener("storage", handleStorageChange);
     };
-  }, []);
+  }, [nowPlaying]);
 
   const handleResumePlayback = () => {
     getPlyrInstance().currentTime = Number(
