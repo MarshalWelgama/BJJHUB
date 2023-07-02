@@ -125,10 +125,12 @@ const App: React.FC = () => {
               currentPlaying={nowPlaying}
             />
             <Routes>
-              <Route
-                path="/"
-                element={<VideoStream nowPlaying={nowPlaying} />}
-              />
+              {!nowPlaying.hidden && (
+                <Route
+                  path="/"
+                  element={<VideoStream nowPlaying={nowPlaying} />}
+                />
+              )}
             </Routes>
           </Router>
         </div>

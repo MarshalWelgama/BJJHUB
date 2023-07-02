@@ -55,9 +55,26 @@ export const VideoStream = ({ nowPlaying }: { nowPlaying: nowPlaying }) => {
     // Direct props for inner video tag (mdn.io/video)
   };
 
-  window.onunload = function () {
-    window.localStorage[nowPlaying.subName] = getPlyrInstance().currentTime;
-  };
+  useEffect(() => {
+    const handlePageHide = () => {
+      window.localStorage[nowPlaying.subName] = getPlyrInstance().currentTime;
+    };
+
+    window.onpagehide = handlePageHide;
+
+    const handleStorageChange = () => {
+      if (window.localStorage.getItem("Navigation") === "true") {
+        handlePageHide();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.onpagehide = null;
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const handleResumePlayback = () => {
     getPlyrInstance().currentTime = Number(
@@ -75,34 +92,32 @@ export const VideoStream = ({ nowPlaying }: { nowPlaying: nowPlaying }) => {
   };
   return (
     <div className="player-wrapper">
-      {!nowPlaying.hidden && (
-        <>
-          {" "}
-          {/* <Button onClick={handleCurrentTime}>Set Current Time</Button> */}
-          <Plyr
-            ref={ref}
-            {...plyrProps}
-            options={{
-              ...plyrProps.options,
-              // Add the event listener for the 'ready' event
-            }}
-            event={{
-              loadeddata: "loadeddata",
-            }}
-          />
-          <Paper sx={{ textAlign: "center" }} elevation={0}>
-            <VideoDescription nowPlaying={nowPlaying} />
-          </Paper>
-          <div style={{ padding: "0px 20px 20px 20px" }}>
-            <Editor getPlyrInstance={getPlyrInstance} />
-          </div>
-          <ResumePlaybackModal
-            handleResumePlayback={handleResumePlayback}
-            nowPlaying={nowPlaying}
-            getPlyr={getPlyrInstance}
-          />
-        </>
-      )}
+      <>
+        {" "}
+        {/* <Button onClick={handleCurrentTime}>Set Current Time</Button> */}
+        <Plyr
+          ref={ref}
+          {...plyrProps}
+          options={{
+            ...plyrProps.options,
+            // Add the event listener for the 'ready' event
+          }}
+          event={{
+            loadeddata: "loadeddata",
+          }}
+        />
+        <Paper sx={{ textAlign: "center" }} elevation={0}>
+          <VideoDescription nowPlaying={nowPlaying} />
+        </Paper>
+        <div style={{ padding: "0px 20px 20px 20px" }}>
+          <Editor getPlyrInstance={getPlyrInstance} />
+        </div>
+        <ResumePlaybackModal
+          handleResumePlayback={handleResumePlayback}
+          nowPlaying={nowPlaying}
+          getPlyr={getPlyrInstance}
+        />
+      </>
     </div>
   );
 };

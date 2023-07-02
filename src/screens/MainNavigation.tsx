@@ -20,6 +20,8 @@ export const MainNavigation = ({
   const [open, setOpen] = React.useState(true);
   const handleDrawer = () => {
     setOpen(!open);
+    window.localStorage["Navigation"] = !open;
+    window.dispatchEvent(new Event("storage"));
   };
 
   return (
