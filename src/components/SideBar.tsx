@@ -36,6 +36,7 @@ export const SideBarComponent = ({
   const theme = useTheme();
   const drawerWidth = 350;
   const [openModal, setOpenModal] = React.useState(false);
+  const isLocalhost = window.location.hostname === "localhost";
 
   React.useEffect(() => {
     console.log(instructionalArr);
@@ -70,43 +71,45 @@ export const SideBarComponent = ({
               <ListItemIcon>{<UploadIcon color="primary" />}</ListItemIcon>
               <ListItemText primary={"Upload"} />
             </ListItemButton>
-
-            <ListItemButton
-              onClick={async () => {
-                const tempArr = instructionalArr as [];
-                tempArr.forEach(async (e: any) => {
-                  await insertToDb(
-                    [
-                      {
-                        instructional: e.name,
-                        last_updated: new Date().toISOString(),
-                      },
-                    ],
-                    "instructionals"
-                  );
-
-                  const name = e.name;
-                  console.log(name);
-                  const volumes = e.volumes as [];
-                  volumes.forEach(async (e: any) => {
+            {isLocalhost && (
+              <ListItemButton
+                onClick={async () => {
+                  const tempArr = instructionalArr as [];
+                  console.log(tempArr);
+                  tempArr.forEach(async (e: any) => {
                     await insertToDb(
                       [
                         {
-                          instructional: name,
-                          volume: e.volume,
-                          link: e.url,
+                          instructional: e.instructional,
                           last_updated: new Date().toISOString(),
                         },
                       ],
-                      "volumes"
+                      "instructionals"
                     );
+
+                    const name = e.instructional;
+                    console.log(name);
+                    const volumes = e.volumes as [];
+                    volumes.forEach(async (e: any) => {
+                      await insertToDb(
+                        [
+                          {
+                            instructional: name,
+                            volume: e.volume,
+                            link: e.link,
+                            last_updated: new Date().toISOString(),
+                          },
+                        ],
+                        "volumes"
+                      );
+                    });
+                    console.log(volumes);
                   });
-                  console.log(volumes);
-                });
-              }}
-            >
-              UpdateDB
-            </ListItemButton>
+                }}
+              >
+                UpdateDB
+              </ListItemButton>
+            )}
           </ListItem>
           <Divider color="primary" />
           <>

@@ -22,7 +22,7 @@ export const insertToDb = async (
 ) => {
   const { data, error } = await supabase
     .from(dbName)
-    .insert(instructional)
+    .upsert(instructional)
     .select();
 
   if (error) {
