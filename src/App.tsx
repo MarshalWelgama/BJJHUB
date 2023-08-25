@@ -42,7 +42,8 @@ const App: React.FC = () => {
           const { data: volumesData, error: volumesError } = await supabase
             .from("volumes")
             .select("volume, link")
-            .eq("instructional", instructional);
+            .eq("instructional", instructional)
+            .order("volume"); // Order by the 'volume' column in ascending order
 
           if (volumesError) {
             throw volumesError;
