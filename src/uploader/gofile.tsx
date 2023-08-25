@@ -1,3 +1,4 @@
+import { instructionals } from "../types";
 import { ROOTFOLDER, TOKEN } from "../utils/constants";
 
 let server: string | undefined;
@@ -89,7 +90,7 @@ export const postData = async (file: File | undefined, folder: string) => {
     .catch((error) => console.error(error));
 };
 
-const setOption = async (fileId: string) => {
+export const setOption = async (fileId: string) => {
   fetch("https://api.gofile.io/setOption", {
     method: "PUT",
     headers: {
@@ -104,9 +105,90 @@ const setOption = async (fileId: string) => {
   })
     .then((response) => response.json())
     .then((data) => {
+      // syncWait(2000);
       if (data.status === "ok") {
         console.log(data.data);
       }
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      throw error;
+    });
+};
+
+const syncWait = (ms: any) => {
+  const end = Date.now() + ms;
+  while (Date.now() < end) continue;
+};
+
+export const fetchDataLegacy = async (): Promise<void> => {
+  try {
+    const parentFolder = await getContent(
+      "7ce5f426-0a7d-46e3-82c2-8870129940ff"
+    );
+    //  setProgressValue(parentFolder.childs.length * -1);
+    let value = parentFolder.childs.length;
+    const fetchedData: any[] = [];
+    for (const folder of parentFolder.childs) {
+      value = value + 1;
+      //   setProgressValue(value);
+      let volumes;
+      let retries = 3; // Number of retries for rate limit error
+
+      while (retries > 0) {
+        try {
+          volumes = await getContent(folder);
+          // Update direct links
+          // const array = volumes.childs as [];
+          // array.forEach(async (e: string) => {
+          //   await setOption(e);
+          // });
+          break; // Break out of the loop if getContent is successful
+        } catch (error: any) {
+          console.log(error.message);
+          if (error.message.includes("429")) {
+            console.warn("Rate limit exceeded. Retrying in 5 seconds...");
+            await new Promise((resolve) => setTimeout(resolve, 5000));
+            retries--;
+          } else throw error;
+        }
+      }
+
+      fetchedData.push({
+        contents: volumes.contents,
+        childs: volumes.childs,
+        name: volumes.name,
+      });
+    }
+
+    const formattedData: instructionals[] = fetchedData.map(
+      ({ childs, contents, name }) => {
+        const ordered = reOrderContent(childs, contents);
+        return formatInstructional(ordered, name);
+      }
+    );
+    console.log(formattedData);
+    //   setContentArray(formattedData);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  } finally {
+    //  setLoading(false);
+  }
+};
+
+const reOrderContent = (childArray: string[], contentArray: {}[]): {}[] =>
+  childArray.map((e: any) => contentArray[e]);
+
+const formatInstructional = (
+  content: {}[],
+  instructional: string
+): instructionals => {
+  const volumes: any = content.map((e: any) => ({
+    volume: e.name.slice(0, -4),
+    link: e.directLink,
+  }));
+
+  return {
+    instructional,
+    volumes,
+  };
 };

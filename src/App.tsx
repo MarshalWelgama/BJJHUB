@@ -7,7 +7,8 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { getContent } from "./uploader/gofile";
 import "./app.css";
 import LinearProgress from "@mui/material/LinearProgress";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import { supabase } from "./config/supabaseClient";
 
 const App: React.FC = () => {
   const [nowPlaying, setNowPlaying] = useState<nowPlaying>({
@@ -24,92 +25,52 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchData = async (): Promise<void> => {
-      try {
-        const parentFolder = await getContent(
-          "7ce5f426-0a7d-46e3-82c2-8870129940ff"
-        );
-        setProgressValue(parentFolder.childs.length * -1);
-        let value = parentFolder.childs.length;
-        const fetchedData: any[] = [];
-        for (const folder of parentFolder.childs) {
-          value = value + 1;
-          setProgressValue(value);
-          let volumes;
-          let retries = 3; // Number of retries for rate limit error
+    //Next step is to Fetch using DB and then move all legacy fetching to the update db onclick function
 
-          while (retries > 0) {
-            try {
-              volumes = await getContent(folder);
-              break; // Break out of the loop if getContent is successful
-            } catch (error: any) {
-              console.log(error.message);
-              if (error.message.includes("429")) {
-                console.warn("Rate limit exceeded. Retrying in 5 seconds...");
-                await new Promise((resolve) => setTimeout(resolve, 5000));
-                retries--;
-              } else throw error;
-            }
+    async function getVolumesForAllInstructionals() {
+      try {
+        const { data: instructionalsData, error: instructionalsError } =
+          await supabase.from("instructionals").select("instructional");
+        if (instructionalsError) {
+          throw instructionalsError;
+        }
+        const allVolumes: instructionals[] = [];
+
+        for (const instructionalData of instructionalsData) {
+          const instructional = instructionalData.instructional;
+
+          const { data: volumesData, error: volumesError } = await supabase
+            .from("volumes")
+            .select("volume, link")
+            .eq("instructional", instructional);
+
+          if (volumesError) {
+            throw volumesError;
           }
 
-          fetchedData.push({
-            contents: volumes.contents,
-            childs: volumes.childs,
-            name: volumes.name,
+          allVolumes.push({
+            instructional: instructional,
+            volumes: volumesData,
           });
         }
-
-        const formattedData: instructionals[] = fetchedData.map(
-          ({ childs, contents, name }) => {
-            const ordered = reOrderContent(childs, contents);
-            return formatInstructional(ordered, name);
-          }
-        );
-
-        setContentArray(formattedData);
+        setContentArray(allVolumes);
       } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching volumes:", error);
       }
-    };
-    fetchData();
+    }
+
+    getVolumesForAllInstructionals();
   }, []);
 
   useEffect(() => {
     setLoading(contentArray.length === 0);
   }, [contentArray]);
 
-  const reOrderContent = (childArray: string[], contentArray: {}[]): {}[] =>
-    childArray.map((e: any) => contentArray[e]);
-
-  const formatInstructional = (content: {}[], name: string): instructionals => {
-    const volumes: volumes[] = content.map((e: any) => ({
-      volume: e.name.slice(0, -4),
-      url: e.directLink,
-    }));
-
-    return {
-      name,
-      volumes,
-    };
-  };
-  const LinearDeterminate = () => {
-    return (
-      <Box sx={{ width: "100%" }}>
-        <LinearProgress
-          variant="determinate"
-          value={Math.round(((progressValue - 23) / 23) * 100)}
-        />
-      </Box>
-    );
-  };
   return (
     <>
       {loading ? (
         <>
           <div>
-            <LinearDeterminate />
             <div className="loading-container">
               <CircularProgress />
             </div>

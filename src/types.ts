@@ -8,10 +8,10 @@ export interface nowPlaying {
 
 export interface volumes {
   volume: string;
-  url: string;
+  link: string;
 }
 
 export interface instructionals {
-  name: String;
+  instructional: String;
   volumes: volumes[];
 }
