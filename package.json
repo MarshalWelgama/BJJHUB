@@ -7,6 +7,7 @@
     "@emotion/styled": "latest",
     "@mui/icons-material": "^5.10.15",
     "@mui/material": "latest",
+    "@supabase/supabase-js": "^2.33.1",
     "@tiptap/extension-floating-menu": "^2.0.0-beta.207",
     "@tiptap/extension-image": "^2.0.0-beta.207",
     "@tiptap/extension-placeholder": "^2.0.0-beta.207",

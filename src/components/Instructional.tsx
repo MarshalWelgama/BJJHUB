@@ -47,7 +47,7 @@ export const Instructional = ({
                   handleNowPlaying({
                     name: name,
                     subName: video.volume,
-                    url: video.url,
+                    url: video.link,
                     upNext:
                       videos[index + 1] && videos[index + 1].volume
                         ? videos[index + 1].volume

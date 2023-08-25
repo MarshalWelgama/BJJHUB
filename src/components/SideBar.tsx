@@ -18,6 +18,7 @@ import AppBar from "@mui/material/AppBar";
 import { volumes, nowPlaying, instructionals } from "../types";
 import { NavigationBarProps } from "../screens/MainNavigation";
 import { UploadModal } from "./UploadModal";
+import { insertToDb } from "../config/supabaseClient";
 
 export const SideBarComponent = ({
   instructionalArr,
@@ -36,6 +37,9 @@ export const SideBarComponent = ({
   const drawerWidth = 350;
   const [openModal, setOpenModal] = React.useState(false);
 
+  React.useEffect(() => {
+    console.log(instructionalArr);
+  }, []);
   const handleClose = () => {
     setOpenModal(!openModal);
   };
@@ -66,13 +70,50 @@ export const SideBarComponent = ({
               <ListItemIcon>{<UploadIcon color="primary" />}</ListItemIcon>
               <ListItemText primary={"Upload"} />
             </ListItemButton>
+
+            <ListItemButton
+              onClick={async () => {
+                const tempArr = instructionalArr as [];
+                tempArr.forEach(async (e: any) => {
+                  await insertToDb(
+                    [
+                      {
+                        instructional: e.name,
+                        last_updated: new Date().toISOString(),
+                      },
+                    ],
+                    "instructionals"
+                  );
+
+                  const name = e.name;
+                  console.log(name);
+                  const volumes = e.volumes as [];
+                  volumes.forEach(async (e: any) => {
+                    await insertToDb(
+                      [
+                        {
+                          instructional: name,
+                          volume: e.volume,
+                          link: e.url,
+                          last_updated: new Date().toISOString(),
+                        },
+                      ],
+                      "volumes"
+                    );
+                  });
+                  console.log(volumes);
+                });
+              }}
+            >
+              UpdateDB
+            </ListItemButton>
           </ListItem>
           <Divider color="primary" />
           <>
             {instructionalArr.map((item, index) => {
               return (
                 <Instructional
-                  name={item.name}
+                  name={item.instructional}
                   videos={item.volumes}
                   handleNowPlaying={onVideoSelect}
                   closeSideBar={closeSideBar}
