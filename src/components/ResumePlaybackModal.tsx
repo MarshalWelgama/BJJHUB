@@ -1,6 +1,7 @@
 import { Modal, Box, Typography, Button, Dialog } from "@mui/material";
 import React, { FunctionComponent, memo, useEffect } from "react";
 import { nowPlaying } from "../types";
+import { getLastTimeDb } from "../config/supabaseClient";
 
 type ResumePlaybackModalProps = {
   handleResumePlayback: () => void;
@@ -11,6 +12,7 @@ export const ResumePlaybackModal: FunctionComponent<
   ResumePlaybackModalProps
 > = ({ handleResumePlayback, nowPlaying, getPlyr }) => {
   const [openModal, setOpenModal] = React.useState(false);
+  const [lastTime, setLastTime] = React.useState("");
   const handleClose = () => {
     setOpenModal(!openModal);
   };
@@ -30,9 +32,12 @@ export const ResumePlaybackModal: FunctionComponent<
     setOpenModal(false);
   };
   useEffect(() => {
-    if (window.localStorage.getItem(nowPlaying.subName)) {
-      setOpenModal(true);
-    }
+    getLastTimeDb(nowPlaying.name, nowPlaying.subName).then((e) => {
+      if (e) {
+        setOpenModal(true);
+        setLastTime(e);
+      }
+    });
   }, [nowPlaying.subName]);
 
   return (
@@ -60,10 +65,7 @@ export const ResumePlaybackModal: FunctionComponent<
           }}
         >
           <Button onClick={handleResumeClick}>
-            Continue from{" "}
-            {Math.round(
-              Number(window.localStorage.getItem(nowPlaying.subName)) / 60
-            )}
+            Continue from {Math.round(Number(lastTime) / 60)}
           </Button>
           <Button onClick={handleClose}>Start from beginning</Button>
         </div>

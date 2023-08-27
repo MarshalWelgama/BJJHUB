@@ -3,21 +3,11 @@ import React, { useEffect, useRef } from "react"; // importing FunctionComponent
 import "plyr-react/plyr.css";
 import "./VideoStream.css";
 import { Editor } from "../components/Editor";
-import {
-  Backdrop,
-  Box,
-  Button,
-  Fade,
-  FormGroup,
-  Modal,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Paper } from "@mui/material";
 import VideoDescription from "../components/VideoDescription";
 import { nowPlaying } from "../types";
-import { BasicMenu } from "../components/basicMenu";
 import ResumePlaybackModal from "../components/ResumePlaybackModal";
+import { getLastTimeDb, updateTimeDb } from "../config/supabaseClient";
 
 export const VideoStream = ({ nowPlaying }: { nowPlaying: nowPlaying }) => {
   const ref = useRef<APITypes>();
@@ -55,19 +45,24 @@ export const VideoStream = ({ nowPlaying }: { nowPlaying: nowPlaying }) => {
     // Direct props for inner video tag (mdn.io/video)
   };
 
+  const handlePageHide = () => {
+    if (getPlyrInstance().currentTime > 0) {
+      updateTimeDb(
+        nowPlaying.name,
+        nowPlaying.subName,
+        getPlyrInstance().currentTime.toString()
+      );
+    }
+  };
+
+  const handleStorageChange = () => {
+    if (window.localStorage.getItem("Navigation") === "true") {
+      handlePageHide();
+    }
+  };
+
   useEffect(() => {
-    const handlePageHide = () => {
-      window.localStorage[nowPlaying.subName] = getPlyrInstance().currentTime;
-    };
-
     window.onpagehide = handlePageHide;
-
-    const handleStorageChange = () => {
-      if (window.localStorage.getItem("Navigation") === "true") {
-        handlePageHide();
-      }
-    };
-
     window.addEventListener("storage", handleStorageChange);
 
     return () => {
@@ -77,19 +72,16 @@ export const VideoStream = ({ nowPlaying }: { nowPlaying: nowPlaying }) => {
   }, [nowPlaying]);
 
   const handleResumePlayback = () => {
-    getPlyrInstance().currentTime = Number(
-      window.localStorage.getItem(nowPlaying.subName)
+    getLastTimeDb(nowPlaying.name, nowPlaying.subName).then(
+      (t: string | undefined) => {
+        getPlyrInstance().currentTime = Number(t);
+        getPlyrInstance().once("loadeddata", (e) => {
+          getPlyrInstance().currentTime = Number(t);
+        });
+      }
     );
-    getPlyrInstance().once("loadeddata", (e) => {
-      getPlyrInstance().currentTime = Number(
-        window.localStorage.getItem(nowPlaying.subName)
-      );
-    });
   };
 
-  const handleCurrentTime = () => {
-    console.log(getPlyrInstance().currentTime);
-  };
   return (
     <div className="player-wrapper">
       <>
