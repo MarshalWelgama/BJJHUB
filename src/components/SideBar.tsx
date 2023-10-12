@@ -19,6 +19,7 @@ import { volumes, nowPlaying, instructionals } from "../types";
 import { NavigationBarProps } from "../screens/MainNavigation";
 import { UploadModal } from "./UploadModal";
 import { insertToDb } from "../config/supabaseClient";
+import { fetchDataLegacy } from "../uploader/gofile";
 
 export const SideBarComponent = ({
   instructionalArr,
@@ -74,8 +75,7 @@ export const SideBarComponent = ({
             {isLocalhost && (
               <ListItemButton
                 onClick={async () => {
-                  const tempArr = instructionalArr as [];
-                  console.log(tempArr);
+                  const tempArr = (await fetchDataLegacy()) as [];
                   tempArr.forEach(async (e: any) => {
                     await insertToDb(
                       [

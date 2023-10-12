@@ -4,10 +4,7 @@ import { MainNavigation } from "./screens/MainNavigation";
 import { instructionals, nowPlaying, volumes } from "./types";
 import { VideoStream } from "./screens/VideoStream";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
-import { getContent } from "./uploader/gofile";
 import "./app.css";
-import LinearProgress from "@mui/material/LinearProgress";
-import { Box } from "@mui/material";
 import { supabase } from "./config/supabaseClient";
 
 const App: React.FC = () => {
@@ -19,7 +16,6 @@ const App: React.FC = () => {
   });
   const [loading, setLoading] = useState(true);
   const [contentArray, setContentArray] = useState<instructionals[]>([]);
-  const [progressValue, setProgressValue] = React.useState(0);
   const handleVideoSelect = (selectedNowPlaying: nowPlaying) => {
     setNowPlaying(selectedNowPlaying);
   };

@@ -105,7 +105,7 @@ export const setOption = async (fileId: string) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      // syncWait(2000);
+      syncWait(2000);
       if (data.status === "ok") {
         console.log(data.data);
       }
@@ -120,7 +120,9 @@ const syncWait = (ms: any) => {
   while (Date.now() < end) continue;
 };
 
-export const fetchDataLegacy = async (): Promise<void> => {
+export const fetchDataLegacy = async (): Promise<
+  instructionals[] | undefined
+> => {
   try {
     const parentFolder = await getContent(
       "7ce5f426-0a7d-46e3-82c2-8870129940ff"
@@ -131,7 +133,7 @@ export const fetchDataLegacy = async (): Promise<void> => {
     for (const folder of parentFolder.childs) {
       value = value + 1;
       //   setProgressValue(value);
-      let volumes;
+      let volumes: any;
       let retries = 3; // Number of retries for rate limit error
 
       while (retries > 0) {
@@ -167,11 +169,10 @@ export const fetchDataLegacy = async (): Promise<void> => {
       }
     );
     console.log(formattedData);
+    return formattedData;
     //   setContentArray(formattedData);
   } catch (error) {
     console.error("Error fetching data:", error);
-  } finally {
-    //  setLoading(false);
   }
 };
 
